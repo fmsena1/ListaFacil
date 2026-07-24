@@ -47,15 +47,22 @@ export const AddEditItemModal: React.FC<AddEditItemModalProps> = ({
     setNomeError(false);
   }, [itemToEdit, visible]);
 
+  const parseInputValue = (val: string, fallback: number): number => {
+    if (!val) return fallback;
+    const normalized = val.replace(',', '.').trim();
+    const parsed = parseFloat(normalized);
+    return isNaN(parsed) ? fallback : parsed;
+  };
+
   const handleSave = () => {
     if (!nome.trim()) {
       setNomeError(true);
       return;
     }
 
-    const parsedQty = parseFloat(quantidade.replace(',', '.')) || 1;
-    const parsedPrice = parseFloat(precoUnitario.replace(',', '.')) || 0;
-    const parsedStock = parseFloat(quantidadeEstoque.replace(',', '.')) || 0;
+    const parsedQty = parseInputValue(quantidade, 1);
+    const parsedPrice = parseInputValue(precoUnitario, 0);
+    const parsedStock = parseInputValue(quantidadeEstoque, 0);
 
     onSave({
       nome: nome.trim(),
@@ -70,8 +77,8 @@ export const AddEditItemModal: React.FC<AddEditItemModalProps> = ({
   };
 
   const selectedUnitLabel = UNIT_OPTIONS.find(u => u.value === unidade)?.label || unidade;
-  const currentQtyNum = parseFloat(quantidade.replace(',', '.')) || 0;
-  const currentPriceNum = parseFloat(precoUnitario.replace(',', '.')) || 0;
+  const currentQtyNum = parseInputValue(quantidade, 0);
+  const currentPriceNum = parseInputValue(precoUnitario, 0);
   const estimatedTotal = currentQtyNum * currentPriceNum;
 
   return (
@@ -96,6 +103,7 @@ export const AddEditItemModal: React.FC<AddEditItemModalProps> = ({
             mode="outlined"
             error={nomeError}
             placeholder="Ex: Arroz, Leite, Maçã"
+            selectTextOnFocus
             style={styles.input}
           />
 
@@ -106,6 +114,7 @@ export const AddEditItemModal: React.FC<AddEditItemModalProps> = ({
               onChangeText={setQuantidade}
               mode="outlined"
               keyboardType="decimal-pad"
+              selectTextOnFocus
               style={[styles.input, { flex: 1, marginRight: 8 }]}
             />
 
@@ -144,6 +153,7 @@ export const AddEditItemModal: React.FC<AddEditItemModalProps> = ({
               mode="outlined"
               keyboardType="decimal-pad"
               placeholder="0,00"
+              selectTextOnFocus
               left={<TextInput.Icon icon="currency-usd" />}
               style={[styles.input, { flex: 1, marginRight: 8 }]}
             />
@@ -155,6 +165,7 @@ export const AddEditItemModal: React.FC<AddEditItemModalProps> = ({
               mode="outlined"
               keyboardType="decimal-pad"
               placeholder="0"
+              selectTextOnFocus
               left={<TextInput.Icon icon="package-variant" />}
               style={[styles.input, { flex: 1 }]}
             />

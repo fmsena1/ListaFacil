@@ -53,15 +53,22 @@ export const RecipeDetailScreen: React.FC<RecipeDetailScreenProps> = ({ route, n
   // Realiza o cálculo completo com base na skill
   const { calculatedItems, result } = RecipeCalculationService.calculateRecipePricing(recipe, resources);
 
+  const parseInputValue = (val: string, fallback: number): number => {
+    if (!val) return fallback;
+    const normalized = val.replace(',', '.').trim();
+    const parsed = parseFloat(normalized);
+    return isNaN(parsed) ? fallback : parsed;
+  };
+
   const handleSaveSettings = () => {
     dispatch(updateRecipeSettings({
       recipeId,
-      nomeProduto: editName,
-      rendimentoUnidades: parseInt(editYield, 10) || 1,
-      percentualCustosInvisiveis: parseFloat(editInvisibles) || 0,
-      percentualMargemLucroEmpresa: parseFloat(editCompanyProfit) || 0,
-      percentualLucroSalario: parseFloat(editSalaryProfit) || 0,
-      percentualTaxasVenda: parseFloat(editTax) || 0,
+      nomeProduto: editName.trim() || recipe.nomeProduto,
+      rendimentoUnidades: Math.max(Math.round(parseInputValue(editYield, 1)), 1),
+      percentualCustosInvisiveis: Math.max(parseInputValue(editInvisibles, 0), 0),
+      percentualMargemLucroEmpresa: Math.max(parseInputValue(editCompanyProfit, 0), 0),
+      percentualLucroSalario: Math.max(parseInputValue(editSalaryProfit, 0), 0),
+      percentualTaxasVenda: Math.max(parseInputValue(editTax, 0), 0),
     }));
     setSettingsDialogVisible(false);
     showToast('Configurações atualizadas!');

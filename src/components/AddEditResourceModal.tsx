@@ -45,14 +45,21 @@ export const AddEditResourceModal: React.FC<AddEditResourceModalProps> = ({
     setNomeError(false);
   }, [resourceToEdit, defaultType, visible]);
 
+  const parseInputValue = (val: string, fallback: number): number => {
+    if (!val) return fallback;
+    const normalized = val.replace(',', '.').trim();
+    const parsed = parseFloat(normalized);
+    return isNaN(parsed) ? fallback : parsed;
+  };
+
   const handleSave = () => {
     if (!nome.trim()) {
       setNomeError(true);
       return;
     }
 
-    const parsedQty = parseFloat(pesoOuQtdCompra.replace(',', '.')) || 1;
-    const parsedPrice = parseFloat(valorPagoCompra.replace(',', '.')) || 0;
+    const parsedQty = parseInputValue(pesoOuQtdCompra, 1);
+    const parsedPrice = parseInputValue(valorPagoCompra, 0);
 
     onSave({
       nome: nome.trim(),
@@ -99,6 +106,7 @@ export const AddEditResourceModal: React.FC<AddEditResourceModalProps> = ({
             mode="outlined"
             error={nomeError}
             placeholder="Ex: Leite Condensado, Chocolate em pó, Caixa"
+            selectTextOnFocus
             style={styles.input}
           />
 
@@ -110,6 +118,7 @@ export const AddEditResourceModal: React.FC<AddEditResourceModalProps> = ({
               mode="outlined"
               keyboardType="decimal-pad"
               placeholder="Ex: 395, 1000, 1"
+              selectTextOnFocus
               style={[styles.input, { flex: 1, marginRight: 8 }]}
             />
 
@@ -147,6 +156,7 @@ export const AddEditResourceModal: React.FC<AddEditResourceModalProps> = ({
             mode="outlined"
             keyboardType="decimal-pad"
             placeholder="Ex: 4.50"
+            selectTextOnFocus
             left={<TextInput.Icon icon="currency-usd" />}
             style={styles.input}
           />

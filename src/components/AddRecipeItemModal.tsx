@@ -40,6 +40,13 @@ export const AddRecipeItemModal: React.FC<AddRecipeItemModalProps> = ({
     setError(false);
   }, [itemToEdit, resources, visible]);
 
+  const parseInputValue = (val: string, fallback: number): number => {
+    if (!val) return fallback;
+    const normalized = val.replace(',', '.').trim();
+    const parsed = parseFloat(normalized);
+    return isNaN(parsed) ? fallback : parsed;
+  };
+
   const handleSave = () => {
     if (!selectedResourceId) {
       setError(true);
@@ -49,7 +56,7 @@ export const AddRecipeItemModal: React.FC<AddRecipeItemModalProps> = ({
     const resource = resources.find(r => r.id === selectedResourceId);
     if (!resource) return;
 
-    const parsedQty = parseFloat(quantidadeUtilizada.replace(',', '.')) || 1;
+    const parsedQty = parseInputValue(quantidadeUtilizada, 1);
 
     onSave({
       resourceId: resource.id,
@@ -115,6 +122,7 @@ export const AddRecipeItemModal: React.FC<AddRecipeItemModalProps> = ({
               mode="outlined"
               keyboardType="decimal-pad"
               placeholder="Ex: 4, 150, 300"
+              selectTextOnFocus
               style={[styles.input, { flex: 1, marginRight: 8 }]}
             />
 
