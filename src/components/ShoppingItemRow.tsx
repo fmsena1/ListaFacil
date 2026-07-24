@@ -27,8 +27,8 @@ export const ShoppingItemRow: React.FC<ShoppingItemRowProps> = React.memo(({
   const theme = useTheme();
 
   const itemTotal = ListService.getItemTotal(item);
-  const hasPrice = item.precoUnitario && item.precoUnitario > 0;
-  const hasStock = item.quantidadeEstoque !== undefined && item.quantidadeEstoque > 0;
+  const hasPrice = typeof item.precoUnitario === 'number' && item.precoUnitario > 0;
+  const hasStock = typeof item.quantidadeEstoque === 'number' && item.quantidadeEstoque > 0;
 
   return (
     <TouchableOpacity
