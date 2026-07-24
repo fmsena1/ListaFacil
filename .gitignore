@@ -1,0 +1,50 @@
+# Node.js e dependências
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Expo e builds temporários
+.expo/
+dist/
+web-build/
+
+# Pastas nativas geradas por prebuild
+android/
+ios/
+
+# Arquivos de Build e Binários Android
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Variáveis de Ambiente e Segredos
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Arquivos de IDE e Editor
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.tsbuildinfo
+
+# Arquivos de log e temporários
+*.log
+
+# Pastas de agentes e IDE
+.agents/
